@@ -1,0 +1,381 @@
+#include<stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define CMAX 10
+
+   int choix, i,a ;
+	typedef struct Scontact
+	{
+		char nom[CMAX];
+		char ville[CMAX];
+		int numero;
+	}Scontact;
+	
+	Scontact contacts[50];	
+
+void menu()
+{
+    printf("1-Ajouter un contact\n");
+    printf("2-Afficher tous les contacts\n");
+    printf("3-Rechercher par nom\n");
+    printf("4-Rechercher par ville\n");
+    //printf("5-Supprimer un contact\n");
+    //printf("6-Modifier un contact\n");
+    printf("7-Quitter\n ");
+    printf("Choisir le menu :   ");
+    scanf("%d", &choix);
+    printf("\n__________________________\n");
+    printf("\n");
+    sousMenu(choix);
+}
+/////////////////////////////////////////////////////
+int Ajouter()
+{
+        FILE *file;
+        struct Scontact contact;
+        printf("Nom contact : ");
+        scanf("%s", &contact.nom);
+        printf("Ville contact : ");
+        scanf("%s", &contact.ville);
+        printf("Numero contact : ");
+        scanf("%d", &contact.numero);
+
+        file = fopen("D:\\c.txt", "a");
+        fwrite(&contact, sizeof(Scontact), 1, file);
+
+        if(fwrite != 0)
+            printf("contact ajouté avec succes!");
+        else
+            printf("erreur");
+        fclose(file);
+        printf(" Pour retourner au menu ,cliquer 0 \n");
+            scanf("%d", &a);
+            if (a==0)
+			{
+            menu();
+			}
+         	else       
+			printf("Mauvais choix!");
+			}
+			    
+////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+int Afficher()
+
+  {
+        FILE *file;
+        struct Scontact contact;
+        file = fopen("D:\\c.txt", "r");
+        int i, nbcontacts = 0;
+        while(fread(&contact, sizeof(struct Scontact), 1, file)) {
+            contacts[nbcontacts] = contact;
+            nbcontacts++;
+        }
+        fclose(file);
+        for (i=0 ; i<nbcontacts ; i++)
+        {
+            printf("\nNom: %s \n" , contacts[i].nom);
+            printf("Ville: %s \n", contacts[i].ville);
+            printf("Numero: %d \n", contacts[i].numero);
+            printf("\n ________________________________\n");
+        }
+            printf(" Pour retourner au menu ,cliquer 0 \n");
+            scanf("%d", &a);
+              if(a==0){
+			    menu();
+			}	
+			
+               
+    }
+    //////////////////////////////////////////////////////////:
+void Rechercher_nom(){
+	 struct Scontact contact;
+    FILE *file;
+    int nbcontacts = 0; //initialisation de nbcontacts
+    char name[20]; //tableau de caractères pour stocker la ville recherchée
+
+    printf("Nom : ");
+    scanf("%s", name); //lecture de la ville recherchée
+
+    file = fopen("D:\\c.txt", "r");
+    int found = 0;
+    while(fread(&contact, sizeof(struct Scontact), 1, file)) {
+        if (strcmp(contact.nom, name) == 0) //comparaison des chaînes de caractères
+        {
+            printf("\n Nom : %s", contact.nom);
+            printf("\n Numero  : %d", contact.numero);
+            printf("\n______________________\n");
+            found = 1; //indique que la ville a été trouvée
+        }
+        nbcontacts++; //incrémentation du nombre de contacts lus
+    }
+    if(found == 0)
+        printf("Nom non existant\n");
+    fclose(file);
+    printf(" Pour retourner au menu, cliquer 0\n");
+    scanf("%d", &a);
+    if (a==0) {
+        menu();
+    } else {       
+        printf("Mauvais choix!");
+    }
+}
+	   
+///////////////////////////////////////////////////////////////////////
+void Rechercher_ville() {
+    struct Scontact contact;
+    FILE *file;
+    int nbcontacts = 0; //initialisation de nbcontacts
+    char v[20]; //tableau de caractères pour stocker la ville recherchée
+
+    printf("ville : ");
+    scanf("%s", v); //lecture de la ville recherchée
+
+    file = fopen("D:\\c.txt", "r");
+    int found = 0;
+    while(fread(&contact, sizeof(struct Scontact), 1, file)) {
+        if (strcmp(contact.ville, v) == 0) //comparaison des chaînes de caractères
+        {
+            printf("\n Nom : %s", contact.nom);
+            printf("\n Numero  : %d", contact.numero);
+            printf("\n______________________\n");
+            found = 1; //indique que la ville a été trouvée
+        }
+        nbcontacts++; //incrémentation du nombre de contacts lus
+    }
+    if(found == 0)
+        printf("ville non existante\n");
+    fclose(file);
+    printf(" Pour retourner au menu, cliquer 0\n");
+    scanf("%d", &a);
+    if (a==0) {
+        menu();
+    } else {       
+        printf("Mauvais choix!");
+    }
+}
+/////////////////////////////////////////////////////////////////
+int sousMenu(int choix)
+{
+	if(choix==1)
+	{
+		printf("Ajouter un contact\n");
+	    Ajouter();
+	}
+	 else if(choix==2)		
+	{   
+	   printf("Afficher les contacts");
+	   Afficher();	
+	}
+	 else if(choix==3)		
+	{
+		printf("Rechercher le contact par nom");
+		Rechercher_nom();;
+	}
+	   else if(choix==4)		
+	{
+		printf("Rechercher le contact par Ville");
+		Rechercher_ville();
+	}
+	   else if(choix==5)
+	{
+	    //modifier();		
+	}
+	   else	if(choix==6)
+	{
+		//supprimer()
+	}
+	
+	  else if(choix==7)
+	   return 0;
+	   
+	  else
+    {
+        printf("mauvaix choix \n");
+         printf(" Pour retourner au menu ,cliquer 0 \n");
+            scanf("%d", &a);
+            if(a==0)
+            menu();	
+        
+    }
+}
+
+    int main(){	
+     menu();
+
+     return 0;
+	}
+/*
+void modifier() {
+    // Déclaration des variables locales
+    struct Scontact contact; // structure contact
+    FILE *file; // fichier de contacts
+    int trouve = 0; // indicateur de contact trouvé
+
+    // Demander le nom du contact à modifier
+    printf("Nom du contact a modifier : ");
+    scanf("%s", contact.nom);
+
+    // Ouvrir le fichier en mode lecture et écriture
+    file = fopen("contact.txt", "r+");
+
+    // Parcourir le fichier jusqu'à la fin ou jusqu'à trouver le contact à modifier
+    while(fread(&contact, sizeof(Scontact), 1, file)) {
+        if (strcmp(contact.nom, contact.nom) == 0) {
+            // Si le nom correspond, demander les nouvelles informations
+            printf("Nouveau numero : ");
+            scanf("%d", &contact.numero);
+
+            // Se positionner à l'emplacement du contact dans le fichier et écrire les nouvelles informations
+            fseek(file, -sizeof(Scontact), SEEK_CUR);
+            fwrite(&contact, sizeof(Scontact), 1, file);
+
+            // Marquer le contact comme trouvé
+            trouve = 1;
+
+            // Sortir de la boucle de lecture du fichier
+            break;
+        }
+    }
+
+    // Fermer le fichier
+    fclose(file);
+
+    // Afficher un message en fonction du résultat de la recherche
+    if (trouve) {
+        printf("Contact modifie avec succes.\n");
+    } else {
+        printf("Contact non trouve.\n");
+    }
+     printf(" Pour retourner au menu ,cliquer 0 \n");
+            scanf("%d", &a);
+            if (a==0)
+			{
+            menu();
+			}
+         	else       
+			printf("Mauvais choix!");
+			
+}
+ /*   
+    int i;
+
+    printf("le nom de contact a modifier   : ");
+    scanf("%s", contact.nom);
+    printf("nv numero : ");
+    scanf("%d", &nvcontact.numero);
+    printf("\n____________\n");
+
+    file = fopen("contact.txt", "r+");
+
+    int nbcontacts = 0;
+
+    // Utiliser une boucle while pour lire tous les contacts existants dans le fichier
+    while(fread(&contact, sizeof(Scontact), 1, file)) {
+        // Si le nom correspond à celui du contact à modifier, copier les nouvelles informations
+        if (strcmp(contact.nom, nvcontact.nom) == 0) {
+        //	Utiliser la fonction strcmp() pour comparer les noms de contact plutôt que l'opérateur ==.
+            contact.numero = nvcontact.numero;
+        }
+        // Ajouter le contact à un tableau temporaire
+        contacts[nbcontacts] = contact;
+        nbcontacts++;
+    }
+    fclose(file);
+
+    // Ouvrir un nouveau fichier pour écrire les contacts mis à jour
+    FILE *nf;
+    nf = fopen("nv.txt", "a");
+    for(i=0 ; i<nbcontacts ; i++)
+    {
+        fwrite(&contacts[i], sizeof(Scontact), 1, nf);
+    }
+    fclose(nf);
+
+    // Supprimer le fichier original et renommer le nouveau fichier
+    remove("contact.txt");
+    int res = rename("nv.txt", "contact.txt" );
+
+    if(res == 0)
+    {
+        printf("contact modifié avec succès\n");
+    }
+    else
+    {
+        printf("Erreur lors de la modification \n");
+    }
+
+/*Les modifications apportées incluent :
+
+Lire chaque contact dans une boucle while plutôt qu'un bloc fread() unique, afin de lire tous les contacts existants.
+Ajouter chaque contact à un tableau temporaire, puis l'écrire dans un nouveau fichier.
+Supprimer le fichier original et renommer le nouveau fichier à la fin de la fonction.
+*/ 
+
+////////////////////////////////////////////:
+/*
+void supprimer(){
+	 struct Scontact contact;
+        FILE *file;
+         char name;
+        printf("contact à supprimer : ");
+        scanf("%s\n", &name);
+
+        file = fopen("contact.txt", "r");
+
+        int nbcontacts = 0;
+
+        while(fread(&contact, sizeof(struct Scontact), 1, file)) {
+            contacts[nbcontacts] = contact;
+            nbcontacts++;
+        }
+        fclose(file);
+        int status = remove("contact.txt");
+            if (status == 0) {
+        printf("Le fichier %s a été supprimé avec succès.\n", contact );
+            } else {
+        printf("La suppression du fichier %s a échoué.\n", contact);
+            }
+        FILE *nf;
+        nf = fopen("nv.txt", "a");
+        for(i=0 ; i<nbcontacts ; i++)
+        {
+            if (contacts[i].nom != &name)
+                fwrite(&contacts, sizeof(contacts[i]), 1, nf);
+        }
+        fclose(nf);
+        int res;
+
+   // Renommer le fichier "ancien_nom.txt" en "nouveau_nom.txt"
+   res = rename("nv.txt", "contact.txt" );
+
+   if(res == 0)
+   {
+      printf("contact supprimé avec succès\n");
+   }
+   else
+   {
+      printf("Erreur lors du renommage\n");
+   }
+        printf(" Pour retourner au menu ,cliquer 0 \n");
+            scanf("%d", &a);
+              if(a==0){
+			    menu();
+}           }
+*/
+
+/*Les erreurs corrigées sont les suivantes :
+
+L'initialisation de la variable nbcontacts était manquante.
+La variable v était déclarée comme un caractère unique, alors qu'elle doit être un tableau de caractères pour stocker une chaîne de caractères.
+L'opérateur d'égalité "==" était utilisé à la place de l'opérateur d'assignation "=" pour mettre à jour la valeur de la variable found.
+La comparaison de la ville recherchée avec la ville du contact était faite en comparant leur adresse mémoire, ce qui est incorrect. La comparaison doit être faite en utilisant la fonction strcmp pour comparer les chaînes de caractères.
+La variable nbcontacts était incrémentée dans la boucle while, alors qu'elle devait l'être après la boucle pour compter le nombre total de contacts lus.
+Le message d'erreur indiquait "code non existant" au lieu de "ville non existante".*/
+
+
+
+
+
+
+    
